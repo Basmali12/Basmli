@@ -2,39 +2,46 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>موقعي التجريبي</title>
+  <title>موقعي باسم</title>
   <style>
     body {
-      background-color: #f9f9f9;
+      background-color: #c40000; /* خلفية حمراء */
       font-family: 'Tahoma', sans-serif;
       text-align: center;
       padding: 50px;
     }
     h1 {
-      color: #333;
+      color: #fff; /* نص أبيض */
     }
     button {
       padding: 10px 20px;
       font-size: 18px;
-      background-color: #007bff;
-      color: white;
+      background-color: #ffffff;
+      color: #c40000;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
     button:hover {
-      background-color: #0056b3;
+      background-color: #ffdddd;
+    }
+    p {
+      font-size: 20px;
+      margin-top: 20px;
+      color: #fff;
     }
   </style>
 </head>
 <body>
   <h1>أهلاً باسم! هذا موقعك 🎉</h1>
-  <button onclick="sayHello()">اضغط هنا</button>
+  <button onclick="countClicks()">اضغط هنا</button>
+  <p id="counter">عدد الضغطات: 0</p>
 
   <script>
-    function sayHello() {
-      alert("الموقع يعمل بنجاح!");
+    let clicks = 0;
+    function countClicks() {
+      clicks++;
+      document.getElementById("counter").innerText = "عدد الضغطات: " + clicks;
     }
   </script>
 </body>
