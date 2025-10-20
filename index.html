@@ -1,48 +1,234 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8" />
-  <title>موقعي باسم</title>
-  <style>
-    body {
-      background-color: #c40000; /* خلفية حمراء */
-      font-family: 'Tahoma', sans-serif;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #fff; /* نص أبيض */
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #ffffff;
-      color: #c40000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #ffdddd;
-    }
-    p {
-      font-size: 20px;
-      margin-top: 20px;
-      color: #fff;
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1, user-scalable=no" />
+<title>مجر الحسابات</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Tahoma, sans-serif;background:linear-gradient(135deg,#c40000,#ff5a5a);display:flex;justify-content:center;padding:20px;min-height:100vh}
+  .container{width:420px; perspective:1000px;}
+  h1{text-align:center;color:#fff;margin:14px 0 16px;text-shadow:0 3px 8px rgba(0,0,0,.4)}
+  button, input {font-size:15px}
+  .top-controls{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+  .btn {padding:10px 14px;border-radius:10px;border:none;cursor:pointer;background:#fff;color:#c40000;box-shadow:0 6px 12px rgba(0,0,0,.18);transition:all .25s;}
+  .btn:active{transform:translateY(2px);}
+  #loginSection{display:none;margin:10px 0}
+  .form-section{background:#fff;padding:16px;border-radius:14px;margin-bottom:18px;box-shadow:0 12px 22px rgba(0,0,0,.18); transform: rotateX(2deg);}
+  input[type="file"]{padding:8px}
+  input[type="text"], input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:8px}
+  .preview{background:#fff;margin-bottom:14px;padding:14px;border-radius:14px;text-align:center;box-shadow:0 16px 30px rgba(0,0,0,.25);transition:transform .25s;}
+  .preview img{width:150px;height:150px;object-fit:cover;border-radius:14px;display:block;margin:0 auto 10px;box-shadow:0 8px 18px rgba(0,0,0,.2);}
+  .buy-btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#25D366;color:#fff;text-decoration:none;margin-top:8px;}
+  .small{font-size:13px;color:#333;margin-top:6px}
+  .danger{background:#ff6b6b;color:#fff}
+  .muted{font-size:13px;color:#fff;text-align:center;margin-top:8px}
+  .flex-row{display:flex;gap:8px}
+</style>
 </head>
 <body>
-  <h1>أهلاً باسم! هذا موقعك 🎉</h1>
-  <button onclick="countClicks()">اضغط هنا</button>
-  <p id="counter">عدد الضغطات: 0</p>
+<div class="container">
+  <h1>مجر الحسابات</h1>
 
-  <script>
-    let clicks = 0;
-    function countClicks() {
-      clicks++;
-      document.getElementById("counter").innerText = "عدد الضغطات: " + clicks;
-    }
-  </script>
+  <div class="top-controls">
+    <button id="adminBtn" class="btn">الإدارة</button>
+    <button id="syncBtn" class="btn">مزامنة JSONBin</button>
+    <button id="clearLocalBtn" class="btn danger">مسح محلي</button>
+  </div>
+
+  <div id="loginSection">
+    <input id="adminPass" type="password" placeholder="أدخل كلمة السر للإدارة">
+    <div class="flex-row" style="margin-top:8px">
+      <button id="loginBtn" class="btn" style="flex:1">دخول</button>
+      <button id="cancelLoginBtn" class="btn" style="flex:1">إلغاء</button>
+    </div>
+  </div>
+
+  <div id="adminPanel" class="form-section" style="display:none">
+    <div style="font-weight:600;margin-bottom:8px">إضافة حساب جديد</div>
+
+    <label>اختر صورة الحساب</label>
+    <input id="imageInput" type="file" accept="image/*">
+
+    <label>اسم الحساب</label>
+    <input id="accountName" type="text" placeholder="اسم الحساب">
+
+    <label>السعر (د.ع)</label>
+    <input id="price" type="text" placeholder="السعر بالدينار">
+
+    <div class="flex-row" style="margin-top:8px;">
+      <button id="addBtn" class="btn" style="flex:1">إضافة وحفظ</button>
+      <button id="deleteAllBtn" class="btn danger" style="flex:1">حذف الكل</button>
+    </div>
+
+    <div class="small" style="margin-top:10px">
+      إعدادات JSONBin (اختياري):
+      <div style="margin-top:6px">
+        <input id="jsonbinBinId" type="text" placeholder="BIN ID" style="width:48%;display:inline-block">
+        <input id="jsonbinMasterKey" type="text" placeholder="MASTER KEY" style="width:48%;display:inline-block;float:right">
+      </div>
+      <div class="small">لو حفظت هنا، الكود سيستخدمها مباشرة.</div>
+    </div>
+  </div>
+
+  <div id="status" class="muted">حالة: جاهز</div>
+  <div id="accountsList" style="margin-top:12px"></div>
+</div>
+
+<script>
+// إعدادات أساسية
+let JSONBIN_BIN_ID = "";
+let JSONBIN_MASTER_KEY = "";
+const ADMIN_PASSWORD = "123123";
+const whatsappNumber = "9647729373260";
+let tempUploadedBase64 = "";
+
+// DOM
+const adminBtn = document.getElementById('adminBtn');
+const loginSection = document.getElementById('loginSection');
+const loginBtn = document.getElementById('loginBtn');
+const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+const adminPanel = document.getElementById('adminPanel');
+const imageInput = document.getElementById('imageInput');
+const accountNameInput = document.getElementById('accountName');
+const priceInput = document.getElementById('price');
+const addBtn = document.getElementById('addBtn');
+const accountsList = document.getElementById('accountsList');
+const statusEl = document.getElementById('status');
+const syncBtn = document.getElementById('syncBtn');
+const deleteAllBtn = document.getElementById('deleteAllBtn');
+const clearLocalBtn = document.getElementById('clearLocalBtn');
+const jsonbinBinIdInput = document.getElementById('jsonbinBinId');
+const jsonbinMasterKeyInput = document.getElementById('jsonbinMasterKey');
+const adminPassInput = document.getElementById('adminPass');
+
+// تحميل الإعدادات المحفوظة
+function loadSavedConfig(){
+  try {
+    const cfg = JSON.parse(localStorage.getItem('jsonbin_config') || "{}");
+    if(cfg.binId) JSONBIN_BIN_ID = cfg.binId;
+    if(cfg.masterKey) JSONBIN_MASTER_KEY = cfg.masterKey;
+    jsonbinBinIdInput.value = JSONBIN_BIN_ID;
+    jsonbinMasterKeyInput.value = JSONBIN_MASTER_KEY ? "••••••••••" : "";
+  } catch(e){}
+}
+loadSavedConfig();
+
+// LocalStorage
+function getLocalAccounts(){return JSON.parse(localStorage.getItem('accounts') || '[]');}
+function saveLocalAccounts(arr){localStorage.setItem('accounts', JSON.stringify(arr));}
+
+// حالة
+function setStatus(text){statusEl.textContent='حالة: '+text;}
+function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+// ضغط الصورة
+function processImageFile(file, size=150){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        canvas.width=canvas.height=size;
+        const ctx=canvas.getContext('2d');
+        ctx.fillStyle="#fff"; ctx.fillRect(0,0,size,size);
+        let sx=0,sy=0,sWidth=img.width,sHeight=img.height;
+        if(img.width>img.height){sx=(img.width-img.height)/2;sWidth=sHeight=img.height;} 
+        else{sy=(img.height-img.width)/2;sWidth=sHeight=img.width;}
+        ctx.drawImage(img,sx,sy,sWidth,sHeight,0,0,size,size);
+        resolve(canvas.toDataURL('image/jpeg',0.6));
+      };
+      img.onerror=()=>reject('invalid image'); img.src=reader.result;
+    };
+    reader.onerror=()=>reject('read error'); reader.readAsDataURL(file);
+  });
+}
+
+// العرض
+function renderAccounts(){
+  const arr=getLocalAccounts();
+  accountsList.innerHTML='';
+  if(arr.length===0){accountsList.innerHTML='<div class="small" style="color:#fff;text-align:center;margin-top:12px">لا توجد حسابات بعد</div>';return;}
+  arr.forEach((account,idx)=>{
+    const div=document.createElement('div');
+    div.className='preview';
+    div.innerHTML=`
+      <img src="${account.uploadedImage}" alt="${account.name}">
+      <h3 style="color:#c40000;margin:8px 0">${escapeHtml(account.name)}</h3>
+      <p style="color:#333;margin:4px 0">السعر: <strong>${escapeHtml(account.price)}</strong> د.ع</p>
+      <a class="buy-btn" href="https://wa.me/${whatsappNumber}/?text=${encodeURIComponent('مرحبا، اريد شراء الحساب ('+account.name+') بسعر '+account.price+' د.ع')}" target="_blank">مراسلة عبر واتساب</a>
+      <div style="margin-top:8px">
+        <button data-idx="${idx}" class="btn copyBtn" style="background:#eee;color:#333;margin-right:6px">نسخ الرابط</button>
+        <button data-del-idx="${idx}" class="btn danger delBtn">حذف</button>
+      </div>
+    `;
+    accountsList.appendChild(div);
+  });
+}
+
+// Event Delegation للأزرار داخل الحسابات
+accountsList.addEventListener('click', function(e){
+  const target=e.target;
+  if(target.classList.contains('delBtn')){
+    const i=Number(target.getAttribute('data-del-idx'));
+    if(!confirm('تأكيد حذف هذا الحساب؟')) return;
+    const arr=getLocalAccounts(); arr.splice(i,1); saveLocalAccounts(arr); renderAccounts();
+    setStatus('تم حذف الحساب');
+  }
+  if(target.classList.contains('copyBtn')){
+    const i=Number(target.getAttribute('data-idx'));
+    const arr=getLocalAccounts();
+    const tempInput=document.createElement('input'); document.body.appendChild(tempInput);
+    tempInput.value=arr[i].uploadedImage; tempInput.select();
+    document.execCommand('copy'); document.body.removeChild(tempInput);
+    setStatus('تم نسخ رابط الصورة للحافظة');
+  }
+});
+
+// عرض الحسابات عند التحميل
+renderAccounts();
+
+// أحداث واجهة الإدارة
+adminBtn.addEventListener('click',()=>loginSection.style.display='block');
+cancelLoginBtn.addEventListener('click',()=>loginSection.style.display='none');
+loginBtn.addEventListener('click',()=>{
+  if(adminPassInput.value===ADMIN_PASSWORD){
+    adminPanel.style.display='block'; loginSection.style.display='none'; setStatus('تم الدخول كأدمن');
+  } else alert('كلمة السر خاطئة');
+});
+
+// اختيار الصورة
+imageInput.addEventListener('change',async(e)=>{
+  if(e.target.files.length>0){
+    tempUploadedBase64 = await processImageFile(e.target.files[0]);
+    setStatus('تم تحميل الصورة');
+  }
+});
+
+// إضافة حساب
+addBtn.addEventListener('click',()=>{
+  const name=accountNameInput.value.trim();
+  const price=priceInput.value.trim();
+  if(!name || !price || !tempUploadedBase64){alert('اكمل كل الحقول واختر صورة'); return;}
+  const accounts=getLocalAccounts();
+  accounts.push({name,price,uploadedImage:tempUploadedBase64});
+  saveLocalAccounts(accounts);
+  renderAccounts();
+  setStatus('تم إضافة الحساب محلياً');
+
+  accountNameInput.value=''; priceInput.value=''; imageInput.value=''; tempUploadedBase64='';
+});
+
+// حذف الكل محلي
+deleteAllBtn.addEventListener('click',()=>{
+  if(!confirm('تأكيد حذف جميع الحسابات؟')) return;
+  localStorage.removeItem('accounts'); renderAccounts(); setStatus('تم حذف جميع الحسابات');
+});
+
+// مسح محلي
+clearLocalBtn.addEventListener('click',()=>{localStorage.removeItem('accounts'); renderAccounts(); setStatus('تم مسح التخزين المحلي');});
+
+</script>
 </body>
 </html>
