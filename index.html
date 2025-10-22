@@ -2,12 +2,17 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>دخول المستخدم</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #b71c1c;
+      background: linear-gradient(-45deg, #000000, #1a1a1a, #333333, #000000);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
       margin: 0;
       padding: 0;
       user-select: none;
@@ -19,7 +24,42 @@
       text-decoration: none;
     }
 
+    .icon-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .icon-rain img {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      animation: fall linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     .container {
+      position: relative;
+      z-index: 1;
       padding: 20px;
       text-align: center;
     }
@@ -103,9 +143,17 @@
       50% { transform: scale(1.05); opacity: 0.8; }
       100% { transform: scale(1); opacity: 1; }
     }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
   </style>
 </head>
 <body oncontextmenu="return false">
+
+  <div class="icon-rain"></div>
 
   <div class="container">
     <h1 id="main-title">أهلاً بك في عالمك الرمزي</h1>
@@ -174,11 +222,12 @@
         welcome.textContent = `مرحبًا بك يا ${name} 🌟`;
         iframeContainer.style.display = "block";
         document.querySelector(".login-btn").style.display = "none";
-        document.querySelectorAll(".login-btn")[1].style.display = "none"; // إخفاء زر شراء الكود
+        document.querySelectorAll(".login-btn")[1].style.display = "none";
         document.getElementById("code-section").style.display = "none";
         document.getElementById("main-title").style.display = "none";
         document.getElementById("app-preview").style.display = "none";
         document.querySelector(".info-text").style.display = "none";
+        document.querySelector(".icon-rain").style.display = "none"; // إخفاء الأيقونات بعد الدخول
       } else {
         errorMsg.textContent = "الكود غير صحيح. حاول مرة أخرى.";
         welcome.textContent = "";
@@ -199,7 +248,8 @@
         e.preventDefault();
       }
     });
-  </script>
 
-</body>
-</html>
+    const iconRain = document.querySelector(".icon-rain");
+    const icons = [43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/Abdullah3434/yoc/tree/35c0baf121a783b546f5a10188e408df372e696e/resources%2Fviews%2Fvendor%2Flayout%2Fappvendor.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054&citationId=1&citationId=2&citationId=3 "github.com")[
+      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Minecraft_Logo.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp
