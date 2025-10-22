@@ -1,193 +1,170 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>مجر الحسابات</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Tahoma,sans-serif;background:linear-gradient(135deg,#c40000,#ff5a5a);display:flex;justify-content:center;padding:20px;min-height:100vh}
-.container{width:420px; perspective:1000px;}
-h1{text-align:center;color:#fff;margin:14px 0 16px;text-shadow:0 3px 8px rgba(0,0,0,.4)}
-button,input{font-size:15px}
-.top-controls{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
-.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;background:#fff;color:#c40000;box-shadow:0 6px 12px rgba(0,0,0,.18);transition:all .25s}
-.btn:active{transform:translateY(2px)}
-#loginSection{display:none;margin:10px 0}
-.form-section{background:#fff;padding:16px;border-radius:14px;margin-bottom:18px;box-shadow:0 12px 22px rgba(0,0,0,.18); transform: rotateX(2deg);}
-input[type="file"]{padding:8px}
-input[type="text"],input[type="password"]{width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:8px}
-.preview{background:#fff;margin-bottom:14px;padding:14px;border-radius:14px;text-align:center;box-shadow:0 16px 30px rgba(0,0,0,.25);transition:transform .25s;}
-.preview img{width:150px;height:150px;object-fit:cover;border-radius:14px;display:block;margin:0 auto 10px;box-shadow:0 8px 18px rgba(0,0,0,.2);}
-.buy-btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#25D366;color:#fff;text-decoration:none;margin-top:8px;}
-.small{font-size:13px;color:#333;margin-top:6px}
-.danger{background:#ff6b6b;color:#fff}
-.muted{font-size:13px;color:#fff;text-align:center;margin-top:8px}
-.flex-row{display:flex;gap:8px}
-</style>
+  <meta charset="UTF-8">
+  <title>دخول المستخدم</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #fff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      color: #00796B;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+
+    .login-btn, .submit-btn {
+      padding: 12px 24px;
+      background-color: #009688;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .login-btn:hover, .submit-btn:hover {
+      background-color: #00796B;
+      transform: scale(1.05);
+    }
+
+    #code-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    #iframe-container {
+      display: none;
+      margin-top: 30px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #welcome {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #004d40;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>مجر الحسابات</h1>
 
-<div class="top-controls">
-  <button id="adminBtn" class="btn">الإدارة</button>
-  <button id="clearLocalBtn" class="btn danger">مسح محلي</button>
-</div>
+  <div class="container">
+    <h1>أهلاً بك في عالمك الرمزي</h1>
+    <button class="login-btn" onclick="showCodeInput()">دخول</button>
 
-<div id="loginSection">
-  <input id="adminPass" type="password" placeholder="أدخل كلمة السر للإدارة">
-  <div class="flex-row" style="margin-top:8px">
-    <button id="loginBtn" class="btn" style="flex:1">دخول</button>
-    <button id="cancelLoginBtn" class="btn" style="flex:1">إلغاء</button>
-  </div>
-</div>
-
-<div id="adminPanel" class="form-section" style="display:none">
-  <div style="font-weight:600;margin-bottom:8px">إضافة حساب جديد</div>
-
-  <label>اختر صورة الحساب</label>
-  <input id="imageInput" type="file" accept="image/*">
-
-  <label>اسم الحساب</label>
-  <input id="accountName" type="text" placeholder="اسم الحساب">
-
-  <label>السعر (د.ع)</label>
-  <input id="price" type="text" placeholder="السعر بالدينار">
-
-  <div class="flex-row" style="margin-top:8px;">
-    <button id="addBtn" class="btn" style="flex:1">إضافة وحفظ</button>
-    <button id="deleteAllBtn" class="btn danger" style="flex:1">حذف الكل</button>
-  </div>
-</div>
-
-<div id="status" class="muted">حالة: جاهز</div>
-<div id="accountsList" style="margin-top:12px"></div>
-</div>
-
-<script>
-const ADMIN_PASSWORD="123123";
-const whatsappNumber="9647729373260";
-let tempUploadedBase64="";
-
-const adminBtn=document.getElementById('adminBtn');
-const loginSection=document.getElementById('loginSection');
-const loginBtn=document.getElementById('loginBtn');
-const cancelLoginBtn=document.getElementById('cancelLoginBtn');
-const adminPanel=document.getElementById('adminPanel');
-const imageInput=document.getElementById('imageInput');
-const accountNameInput=document.getElementById('accountName');
-const priceInput=document.getElementById('price');
-const addBtn=document.getElementById('addBtn');
-const accountsList=document.getElementById('accountsList');
-const statusEl=document.getElementById('status');
-const deleteAllBtn=document.getElementById('deleteAllBtn');
-const clearLocalBtn=document.getElementById('clearLocalBtn');
-const adminPassInput=document.getElementById('adminPass');
-
-// LocalStorage
-function getLocalAccounts(){return JSON.parse(localStorage.getItem('accounts')||'[]');}
-function saveLocalAccounts(arr){localStorage.setItem('accounts',JSON.stringify(arr));}
-function setStatus(text){statusEl.textContent='حالة: '+text;}
-function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
-// ضغط الصورة
-function processImageFile(file,size=150){
-return new Promise((resolve,reject)=>{
-  const reader=new FileReader();
-  reader.onload=()=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement('canvas');
-      canvas.width=canvas.height=size;
-      const ctx=canvas.getContext('2d');
-      ctx.fillStyle="#fff";ctx.fillRect(0,0,size,size);
-      let sx=0,sy=0,sWidth=img.width,sHeight=img.height;
-      if(img.width>img.height){sx=(img.width-img.height)/2;sWidth=sHeight=img.height;}else{sy=(img.height-img.width)/2;sWidth=sHeight=img.width;}
-      ctx.drawImage(img,sx,sy,sWidth,sHeight,0,0,size,size);
-      resolve(canvas.toDataURL('image/jpeg',0.6));
-    };
-    img.onerror=()=>reject('invalid image');img.src=reader.result;
-  };
-  reader.onerror=()=>reject('read error');reader.readAsDataURL(file);
-});
-}
-
-// عرض الحسابات
-function renderAccounts(){
-const arr=getLocalAccounts();
-accountsList.innerHTML='';
-if(arr.length===0){accountsList.innerHTML='<div class="small" style="color:#fff;text-align:center;margin-top:12px">لا توجد حسابات بعد</div>';return;}
-arr.forEach((account,idx)=>{
-  const div=document.createElement('div');
-  div.className='preview';
-  div.innerHTML=`
-    <img src="${account.uploadedImage}" alt="${account.name}">
-    <h3 style="color:#c40000;margin:8px 0">${escapeHtml(account.name)}</h3>
-    <p style="color:#333;margin:4px 0">السعر: <strong>${escapeHtml(account.price)}</strong> د.ع</p>
-    <a class="buy-btn" href="https://wa.me/${whatsappNumber}/?text=${encodeURIComponent('مرحبا، اريد شراء الحساب ('+account.name+') بسعر '+account.price+' د.ع')}" target="_blank">مراسلة عبر واتساب</a>
-    <div style="margin-top:8px">
-      <button data-idx="${idx}" class="btn copyBtn" style="background:#eee;color:#333;margin-right:6px">نسخ الرابط</button>
-      <button data-del-idx="${idx}" class="btn danger delBtn">حذف</button>
+    <div id="code-section">
+      <input type="text" id="userName" placeholder="أدخل اسمك">
+      <br>
+      <input type="text" id="userCode" placeholder="أدخل كود المستخدم">
+      <br>
+      <button class="submit-btn" onclick="checkCode()">تأكيد</button>
+      <div class="error" id="errorMsg"></div>
     </div>
-  `;
-  accountsList.appendChild(div);
-});
-}
 
-// Event Delegation
-accountsList.addEventListener('click', function(e){
-  const target=e.target;
-  if(target.classList.contains('delBtn')){
-    const i=Number(target.getAttribute('data-del-idx'));
-    if(!confirm('تأكيد حذف هذا الحساب؟')) return;
-    const arr=getLocalAccounts();arr.splice(i,1);saveLocalAccounts(arr);renderAccounts();setStatus('تم حذف الحساب');
-  }
-  if(target.classList.contains('copyBtn')){
-    const i=Number(target.getAttribute('data-idx'));
-    const arr=getLocalAccounts();
-    const tempInput=document.createElement('input');document.body.appendChild(tempInput);
-    tempInput.value=arr[i].uploadedImage;tempInput.select();
-    document.execCommand('copy');document.body.removeChild(tempInput);
-    setStatus('تم نسخ رابط الصورة للحافظة');
-  }
-});
+    <div id="welcome"></div>
 
-// عرض عند التحميل
-renderAccounts();
+    <div id="iframe-container">
+      <iframe src="https://linkfly.to/71006mb6ife"></iframe>
+    </div>
+  </div>
 
-// أحداث واجهة الإدارة
-adminBtn.addEventListener('click',()=>loginSection.style.display='block');
-cancelLoginBtn.addEventListener('click',()=>loginSection.style.display='none');
-loginBtn.addEventListener('click',()=>{
-if(adminPassInput.value===ADMIN_PASSWORD){adminPanel.style.display='block';loginSection.style.display='none';setStatus('تم الدخول كأدمن');}else alert('كلمة السر خاطئة');
-});
+  <script>
+    const validCodes = [
+      "CODE123", "BASM2025", "USER01", "ENTRY77", "ACCESS99",
+      "HELLO22", "RAMZ88", "KEY2024", "OPENME", "TRYME",
+      "PASS10", "LOGIN55", "GO2025", "UNLOCK", "SYMBOLIC",
+      "CREATOR", "ARTIST", "SUPPORT", "EDUCATE", "INSPIRE",
+      "NEWCODE21", "VIPIRAQ", "BASM-ENTRY", "CREATOR2025", "ACCESS-IRAQ"
+    ];
 
-// اختيار الصورة
-imageInput.addEventListener('change',async(e)=>{
-if(e.target.files.length>0){tempUploadedBase64=await processImageFile(e.target.files[0]);setStatus('تم تحميل الصورة');}
-});
+    window.onload = function() {
+      const savedName = localStorage.getItem("userName");
+      const savedCode = localStorage.getItem("userCode");
+      if (savedName && savedCode && validCodes.includes(savedCode)) {
+        document.getElementById("welcome").textContent = `مرحبًا بك يا ${savedName} 🌟`;
+        document.getElementById("iframe-container").style.display = "block";
+        document.querySelector(".login-btn").style.display = "none";
+      }
+    };
 
-// إضافة حساب
-addBtn.addEventListener('click',()=>{
-const name=accountNameInput.value.trim();
-const price=priceInput.value.trim();
-if(!name||!price||!tempUploadedBase64){alert('اكمل كل الحقول واختر صورة');return;}
-const accounts=getLocalAccounts();
-accounts.push({name,price,uploadedImage:tempUploadedBase64});
-saveLocalAccounts(accounts);renderAccounts();
-setStatus('تم إضافة الحساب محلياً');
-accountNameInput.value='';priceInput.value='';imageInput.value='';tempUploadedBase64='';
-});
+    function showCodeInput() {
+      document.getElementById("code-section").style.display = "block";
+    }
 
-// حذف الكل محلي
-deleteAllBtn.addEventListener('click',()=>{
-if(!confirm('تأكيد حذف جميع الحسابات؟')) return;
-localStorage.removeItem('accounts'); renderAccounts(); setStatus('تم حذف جميع الحسابات');
-});
+    function checkCode() {
+      const name = document.getElementById("userName").value.trim();
+      const code = document.getElementById("userCode").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+      const welcome = document.getElementById("welcome");
+      const iframeContainer = document.getElementById("iframe-container");
 
-// مسح محلي
-clearLocalBtn.addEventListener('click',()=>{localStorage.removeItem('accounts'); renderAccounts(); setStatus('تم مسح التخزين المحلي');});
-</script>
+      if (name === "" || code === "") {
+        errorMsg.textContent = "يرجى إدخال الاسم والكود.";
+        return;
+      }
+
+      if (validCodes.includes(code)) {
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userCode", code);
+        errorMsg.textContent = "";
+        welcome.textContent = `مرحبًا بك يا ${name} 🌟`;
+        iframeContainer.style.display = "block";
+        document.querySelector(".login-btn").style.display = "none";
+      } else {
+        errorMsg.textContent = "الكود غير صحيح. حاول مرة أخرى.";
+        welcome.textContent = "";
+        iframeContainer.style.display = "none";
+      }
+    }
+  </script>
+
 </body>
 </html>
