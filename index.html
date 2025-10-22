@@ -3,36 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>دخول المستخدم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fff);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background-color: #b71c1c; /* خلفية حمراء */
       margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
 
     .container {
-      background: white;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 20px;
       text-align: center;
-      max-width: 400px;
-      width: 90%;
     }
 
     h1 {
-      color: #00796B;
+      color: #fff;
       margin-bottom: 20px;
       animation: pulse 2s infinite;
     }
 
     .login-btn, .submit-btn {
       padding: 12px 24px;
-      background-color: #009688;
+      background-color: #f44336;
       color: white;
       border: none;
       border-radius: 8px;
@@ -43,7 +40,7 @@
     }
 
     .login-btn:hover, .submit-btn:hover {
-      background-color: #00796B;
+      background-color: #d32f2f;
       transform: scale(1.05);
     }
 
@@ -63,7 +60,7 @@
     }
 
     .error {
-      color: red;
+      color: yellow;
       margin-top: 10px;
       font-size: 14px;
     }
@@ -75,16 +72,16 @@
 
     iframe {
       width: 100%;
-      height: 500px;
+      height: 100vh;
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 0;
+      box-shadow: none;
     }
 
     #welcome {
       margin-top: 20px;
       font-size: 18px;
-      color: #004d40;
+      color: #fff;
     }
 
     @keyframes pulse {
@@ -94,7 +91,7 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false">
 
   <div class="container">
     <h1>أهلاً بك في عالمك الرمزي</h1>
@@ -132,6 +129,7 @@
         document.getElementById("welcome").textContent = `مرحبًا بك يا ${savedName} 🌟`;
         document.getElementById("iframe-container").style.display = "block";
         document.querySelector(".login-btn").style.display = "none";
+        document.getElementById("code-section").style.display = "none";
       }
     };
 
@@ -158,12 +156,29 @@
         welcome.textContent = `مرحبًا بك يا ${name} 🌟`;
         iframeContainer.style.display = "block";
         document.querySelector(".login-btn").style.display = "none";
+        document.getElementById("code-section").style.display = "none";
       } else {
         errorMsg.textContent = "الكود غير صحيح. حاول مرة أخرى.";
         welcome.textContent = "";
         iframeContainer.style.display = "none";
       }
     }
+
+    // منع النسخ
+    document.addEventListener("copy", function(e) {
+      e.preventDefault();
+    });
+
+    // منع اختصارات النسخ والمطور
+    document.addEventListener("keydown", function(e) {
+      if (
+        (e.ctrlKey && e.key === "u") ||
+        (e.ctrlKey && e.key === "c") ||
+        (e.ctrlKey && e.shiftKey && e.key === "I")
+      ) {
+        e.preventDefault();
+      }
+    });
   </script>
 
 </body>
