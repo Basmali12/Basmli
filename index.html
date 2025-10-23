@@ -21,29 +21,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    .icon-rain {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .icon-rain img {
-      position: absolute;
-      width: 32px;
-      height: 32px;
-      animation: fall linear infinite;
-      opacity: 0.9;
-    }
-
-    @keyframes fall {
-      0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-    }
-
     .container {
       position: relative;
       z-index: 1;
@@ -111,7 +88,6 @@
       color: #fff;
     }
 
-    /* زر التحديث */
     #refreshBtn {
       display: none;
       margin: 15px;
@@ -132,10 +108,9 @@
 </head>
 <body oncontextmenu="return false">
 
-  <div class="icon-rain"></div>
-
   <div class="container">
     <h1 id="main-title">أهلاً بك في بوابة المستقبل</h1>
+    <p id="app-version" style="color:#fff; margin-top:10px;">إصدار التطبيق: 7.464.75</p>
     <p id="app-preview">تطبيق مجاني يقدم برامج معدلة وكورسات مجانية بأسلوب رمزي ملهم.</p>
     <p class="info-text">إذا لم يكن لديك كود دخول، يمكنك الاشتراك بسعر 19$ للحصول على كود خاص بك.</p>
 
@@ -153,16 +128,14 @@
 
     <div id="welcome"></div>
 
-    <!-- زر تحديث الموقع الخارجي -->
     <button id="refreshBtn" onclick="refreshSite()">🔄 تحديث المحتوى</button>
 
     <div id="iframe-container">
-      <iframe id="externalSite" src="https://linkfly.to/71006mb6ife"></iframe>
+      <iframe id="externalSite" src="https://linkfly.to/71006mb6ife?v=20251023"></iframe>
     </div>
   </div>
 
   <script>
-    // الأكواد الصحيحة
     const validCodes = [
       "CODE123", "BASM2025", "USER01", "ENTRY77", "ACCESS99",
       "HELLO22", "RAMZ88", "KEY2024", "OPENME", "TRYME",
@@ -209,7 +182,6 @@
         document.getElementById("main-title").style.display = "none";
         document.getElementById("app-preview").style.display = "none";
         document.querySelector(".info-text").style.display = "none";
-        document.querySelector(".icon-rain").style.display = "none";
       } else {
         errorMsg.textContent = "الكود غير صحيح. حاول مرة أخرى.";
         welcome.textContent = "";
@@ -220,30 +192,13 @@
 
     function refreshSite() {
       const iframe = document.getElementById("externalSite");
-      iframe.src = iframe.src; // يعيد تحميل الموقع الخارجي
+      iframe.src = iframe.src.split("?v=")[0] + "?v=" + new Date().getTime();
     }
 
-    // تأثير الأيقونات المتساقطة
-    const iconRain = document.querySelector(".icon-rain");
-    const icons = [
-      "https://upload.wikimedia.org/wikipedia/commons/0/0e/Minecraft_Logo.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/9/95/TikTok_logo.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/7/75/Discord_icon.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/4/4e/Google_Play_Store_badge_EN.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/7/78/YouTube_Logo_2017.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/2/2f/Adobe_Photoshop_CC_icon.svg"
-    ];
-
-    function createIcon() {
-      const img = document.createElement("img");
-      img.src = icons[Math.floor(Math.random() * icons.length)];
-      img.style.left = Math.random() * window.innerWidth + "px";
-      img.style.animationDuration = (5 + Math.random() * 5) + "s";
-      iconRain.appendChild(img);
-    }
-
-    setInterval(createIcon, 500);
+    document.addEventListener("DOMContentLoaded", function() {
+      const iframe = document.getElementById("externalSite");
+      iframe.src = iframe.src.split("?v=")[0] + "?v=" + new Date().getTime();
+    });
   </script>
 </body>
 </html>
