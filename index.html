@@ -1,119 +1,485 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>بوابة المستقبل</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body { font-family: 'Cairo', sans-serif; background: linear-gradient(-45deg,#000,#1a1a1a,#333,#000); background-size:400% 400%; animation:gradientBG 15s ease infinite; margin:0; padding:0; user-select:none;}
-    @keyframes gradientBG{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-    .container{position:relative; z-index:1; padding:20px; text-align:center;}
-    h1,p{color:#fff;}
-    .login-btn,.submit-btn{padding:12px 24px; background-color:#f44336; color:white; border:none; border-radius:8px; font-size:16px; cursor:pointer; margin:5px; transition:0.3s;}
-    .login-btn:hover,.submit-btn:hover{background-color:#ff5722;}
-    #code-section{display:none;margin-top:20px;}
-    input[type="text"]{padding:10px;width:80%;border:1px solid #ccc;border-radius:6px;margin-bottom:10px;font-size:16px;text-align:center;}
-    .error{color:yellow;margin-top:10px;font-size:14px;}
-    #iframe-container{display:none;margin-top:30px;}
-    iframe{width:100%;height:100vh;border:none;border-radius:10px;box-shadow:0 0 10px #333;}
-    #welcome{margin-top:20px;font-size:18px;color:#fff;}
-    #refreshBtn{display:none;margin:15px;padding:10px 25px;background-color:#28a745;color:white;border:none;border-radius:8px;font-size:16px;cursor:pointer;transition:0.3s;}
-    #refreshBtn:hover{background-color:#218838;}
-    #app-version{color:#fff;margin-top:10px;}
+    :root{
+      --accent:#ff5722;
+      --accent-dark:#e64a19;
+      --bg1:#000000;
+      --bg2:#1a1a1a;
+      --card-bg: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.14);
+      --text:#ffffff;
+      --muted: rgba(255,255,255,0.85);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      padding:0;
+      font-family: "Cairo", "Arial", sans-serif;
+      background: linear-gradient(-45deg, var(--bg1), #330000, #660000, var(--bg2));
+      background-size:400% 400%;
+      animation: bgMove 14s ease infinite;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      direction:rtl;
+      user-select:none;
+    }
+    @keyframes bgMove{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    .page {
+      position:relative;
+      z-index:2;
+      max-width:980px;
+      margin:18px auto;
+      padding:18px;
+    }
+
+    header{
+      text-align:center;
+      margin-bottom:12px;
+    }
+    header h1{
+      margin:6px 0;
+      font-size:28px;
+      letter-spacing:1px;
+    }
+    header p{margin:0;color:var(--muted)}
+
+    .controls{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      margin:14px 0;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:10px 16px;
+      border-radius:10px;
+      font-size:15px;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,0.35);
+      transition:transform .15s, background .12s;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .btn:hover{transform:translateY(-2px); background:var(--accent-dark)}
+    .btn.ghost{background:transparent;border:1px solid var(--card-border);color:var(--text)}
+    .small{padding:8px 12px;font-size:14px;border-radius:8px}
+
+    /* Features box (scrollable) */
+    .features-box{
+      background:var(--card-bg);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      padding:14px;
+      margin:16px auto;
+      max-height:300px;
+      overflow:auto;
+      width:calc(100% - 40px);
+      box-shadow:0 6px 30px rgba(0,0,0,0.35);
+    }
+    .features-box h3{margin:6px 0 10px;color:#ffd57f;text-align:center}
+    .features-list{display:block;text-align:right;line-height:1.6;color:var(--muted);font-size:15px;padding-right:6px}
+    .features-list p{margin:6px 0}
+
+    /* login section */
+    #code-section{
+      display:none;
+      margin:16px auto;
+      width:100%;
+      max-width:480px;
+      background: rgba(255,255,255,0.03);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+      padding:14px;
+      text-align:center;
+    }
+    #code-section input{
+      width:100%;
+      padding:10px 12px;
+      margin:8px 0;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.08);
+      background:transparent;
+      color:var(--text);
+      font-size:15px;
+      text-align:center;
+    }
+    #errorMsg{color:#ffeb3b;margin-top:8px;font-size:14px}
+
+    /* iframe container */
+    #iframe-container{
+      display:none;
+      margin-top:18px;
+      width:100%;
+      background:var(--card-bg);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    }
+    #externalSite{
+      width:100%;
+      height:70vh;
+      border:0;
+      display:block;
+    }
+
+    /* small helpers */
+    .meta{
+      text-align:center;margin-top:10px;color:var(--muted);font-size:13px
+    }
+    .hidden{display:none !important}
+
+    /* falling icons */
+    .icon-rain{
+      pointer-events:none;
+      position:fixed;
+      inset:0;
+      overflow:hidden;
+      z-index:1;
+    }
+    .icon-rain img{
+      position:absolute;
+      width:28px;
+      height:28px;
+      opacity:0.9;
+      animation:fall linear infinite;
+    }
+    @keyframes fall{
+      0%{transform:translateY(-60px) rotate(0deg); opacity:0}
+      20%{opacity:1}
+      100%{transform:translateY(110vh) rotate(360deg); opacity:0}
+    }
+
+    /* scroll bar style inside features */
+    .features-box::-webkit-scrollbar{width:8px}
+    .features-box::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#ff9800,#ff5722);border-radius:8px}
+
+    /* responsive */
+    @media (max-width:600px){
+      header h1{font-size:22px}
+      .features-box{max-height:240px}
+      #externalSite{height:60vh}
+    }
   </style>
 </head>
 <body oncontextmenu="return false">
-  <div class="container">
-    <h1 id="main-title">أهلاً بك في بوابة المستقبل</h1>
-    <p id="app-version">إصدار التطبيق: 7.464.75</p>
-    <p id="app-preview">تطبيق مجاني يقدم برامج معدلة وكورسات مجانية بأسلوب رمزي ملهم.</p>
-    <p class="info-text">إذا لم يكن لديك كود دخول، يمكنك الاشتراك بسعر 19$ للحصول على كود خاص بك.</p>
 
-    <button id="loginBtn" class="login-btn">دخول</button>
-    <button id="buyBtn" class="login-btn">شراء الكود</button>
+  <!-- falling icons layer -->
+  <div class="icon-rain" aria-hidden="true"></div>
 
-    <div id="code-section">
-      <input type="text" id="userName" placeholder="أدخل اسمك"><br>
-      <input type="text" id="userCode" placeholder="أدخل كود المستخدم"><br>
-      <button id="submitBtn" class="submit-btn">تأكيد</button>
-      <div class="error" id="errorMsg"></div>
+  <div class="page" role="main">
+    <header>
+      <h1>أهلاً بك في بوابة المستقبل</h1>
+      <p>تطبيق يوفّر كورسات، ألعاب، كتب، أدوات ربح ومحتوى متجدد — اشترك لتحصل على الوصول الكامل.</p>
+    </header>
+
+    <div class="controls" role="region" aria-label="التحكم">
+      <button id="loginBtn" class="btn">دخول</button>
+      <a id="buyBtn" class="btn" target="_blank" rel="noopener noreferrer"
+         href="https://wa.me/9647729373260?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20%D8%A8%D9%88%D8%A7%D8%A8%D8%A9%20%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%82%D8%A8%20%D9%88%D8%A3%D8%B1%D9%8A%D8%AF%20%D9%83%D9%88%D8%AF%20%D8%A7%D9%84%D8%AF%D8%AE%D9%88%D9%84.">
+        شراء الكود
+      </a>
     </div>
 
-    <div id="welcome"></div>
+    <!-- ميزات الاشتراك كاملة (قابلة للتمرير) -->
+    <div class="features-box" aria-live="polite">
+      <h3>ميزات الاشتراك الكاملة (1–50)</h3>
+      <div class="features-list">
+        <p><strong>1–10: التعليم والكورسات</strong></p>
+        <p>1. أكثر من 1,000,000 كورس مجاني في البرمجة والتصميم واللغات.</p>
+        <p>2. كتب مرفقة مع بعض الكورسات لتسهيل التعلم.</p>
+        <p>3. كورسات تعليمية في تطوير الذات والمهارات الشخصية.</p>
+        <p>4. دورات مجانية في التسويق الرقمي وإدارة الأعمال.</p>
+        <p>5. كورسات تعليمية للأطفال والشباب.</p>
+        <p>6. فيديوهات تعليمية تفاعلية مع شروحات عملية.</p>
+        <p>7. كورسات في الذكاء الاصطناعي والتقنيات الحديثة.</p>
+        <p>8. برامج تدريبية مع شهادات مجانية عند الانتهاء.</p>
+        <p>9. تحديث مستمر للكورسات الجديدة كل أسبوع.</p>
+        <p>10. إمكانية تحميل الكورسات لمشاهدتها أو الدراسة بدون إنترنت.</p>
 
-    <button id="refreshBtn" onclick="refreshSite()">🔄 تحديث المحتوى</button>
+        <p><strong>11–20: الألعاب والتطبيقات</strong></p>
+        <p>11. أكثر من 1,000,000 لعبة معدلة بدون إعلانات.</p>
+        <p>12. ألعاب بأموال وموارد بلا حدود.</p>
+        <p>13. 80٪ من الألعاب من Google Play معدلة لتجربة سلسة.</p>
+        <p>14. أكثر من 1,000,000 تطبيق معدل مفتوح الميزات.</p>
+        <p>15. تطبيقات تحرير الصور والفيديو بدون علامات مائية.</p>
+        <p>16. تطبيقات تعليمية للأطفال والشباب.</p>
+        <p>17. أدوات تصميم جاهزة للاستخدام.</p>
+        <p>18. برامج لتعديل الصوت والصور والفيديو بسهولة.</p>
+        <p>19. تحديث مستمر للألعاب والتطبيقات الجديدة.</p>
+        <p>20. إمكانية تجربة التطبيقات قبل التحميل الكامل.</p>
 
-    <div id="iframe-container">
-      <iframe id="externalSite" src="https://linkfly.to/71006mb6ife?v=20251023"></iframe>
+        <p><strong>21–30: الربح والعمل عبر الإنترنت</strong></p>
+        <p>21. أكثر من 500,000 موقع موثوق للعمل عن بعد.</p>
+        <p>22. مواقع للعمل الحر وكسب المال أونلاين.</p>
+        <p>23. مواقع للتجارة الإلكترونية والتسويق الرقمي.</p>
+        <p>24. مواقع للوظائف والدورات المدفوعة المجانية.</p>
+        <p>25. أدوات مساعدة في الربح من الانترنت.</p>
+        <p>26. نصائح ودروس عن كيفية زيادة الدخل أونلاين.</p>
+        <p>27. روابط لمواقع الاستثمار والتعليم المالي.</p>
+        <p>28. مواقع تعلم التسويق عبر وسائل التواصل الاجتماعي.</p>
+        <p>29. منصات لتصميم التطبيقات والمواقع وربح المال.</p>
+        <p>30. إمكانية متابعة تحديثات المواقع الجديدة باستمرار.</p>
+
+        <p><strong>31–40: الكتب والمكتبات الرقمية</strong></p>
+        <p>31. أكثر من 4,000 موقع لقراءة الكتب المدفوعة مجاناً.</p>
+        <p>32. مكتبة ضخمة للكتب التعليمية والأكاديمية.</p>
+        <p>33. روايات وقصص أطفال مجانية.</p>
+        <p>34. كتب تطوير الذات وتنمية المهارات.</p>
+        <p>35. كتب عن ريادة الأعمال والمالية الشخصية.</p>
+        <p>36. كتب عن البرمجة والتقنية.</p>
+        <p>37. كتب إسلامية وتاريخية وثقافية.</p>
+        <p>38. إمكانية تحميل الكتب وقراءتها بدون إنترنت.</p>
+        <p>39. مكتبات إلكترونية منظمة حسب الموضوع والفئة.</p>
+        <p>40. تحديث دائم للكتب الجديدة والمميزة.</p>
+
+        <p><strong>41–50: المحتوى الإضافي والأدوات</strong></p>
+        <p>41. أكثر من 500,000 قصة مجانية.</p>
+        <p>42. قصص قصيرة وطويلة للأطفال والكبار.</p>
+        <p>43. مكتبة قصص شعبية وحكايات من جميع أنحاء العالم.</p>
+        <p>44. أدوات تصميم وبرمجة مجانية للمشاريع الشخصية.</p>
+        <p>45. قوالب جاهزة للتطبيقات والمواقع.</p>
+        <p>46. سيناريوهات جاهزة للفيديوهات والمشاريع التعليمية.</p>
+        <p>47. برامج تحرير الصور والفيديو بدون قيود.</p>
+        <p>48. دعم فني مباشر لحل أي مشكلة تقنية.</p>
+        <p>49. تجربة آمنة وموثوقة لجميع الروابط والملفات.</p>
+        <p>50. تحديث مستمر لجميع المحتوى، لضمان وصولك لأحدث الموارد دائماً.</p>
+      </div>
     </div>
+
+    <!-- قسم إدخال الكود -->
+    <div id="code-section" aria-hidden="true">
+      <input id="userName" type="text" placeholder="أدخل اسمك (اختياري)">
+      <input id="userCode" type="text" placeholder="أدخل كود الدخول">
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:6px">
+        <button id="submitBtn" class="btn small">تأكيد</button>
+        <button id="cancelBtn" class="btn small ghost">إلغاء</button>
+      </div>
+      <div id="errorMsg" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- iframe container -->
+    <div id="iframe-container" aria-hidden="true">
+      <div style="display:flex;gap:8px;justify-content:flex-end;padding:8px;background:rgba(0,0,0,0.12)">
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button id="refreshBtn" class="btn small">🔄 تحديث</button>
+          <button id="logoutBtn" class="btn small ghost">خروج</button>
+        </div>
+      </div>
+      <iframe id="externalSite" src="" title="محتوى بوابة المستقبل"></iframe>
+    </div>
+
+    <div class="meta">إذا واجهت أي مشكلة تواصل عبر زر "شراء الكود" أو أرسل رسالة مباشرة للرقم.</div>
   </div>
 
   <script>
-    const validCodes = [
-      "CODE123","BASM2025","USER01","ENTRY77","ACCESS99",
-      "HELLO22","RAMZ88","KEY2024","OPENME","TRYME",
-      "PASS10","LOGIN55","GO2025","UNLOCK","SYMBOLIC",
-      "CREATOR","ARTIST","SUPPORT","EDUCATE","INSPIRE",
-      "NEWCODE21","VIPIRAQ","BASM-ENTRY","CREATOR2025","ACCESS-IRAQ"
-    ];
+    /***********************
+     * الإعدادات الأساسية
+     ***********************/
+    // الكود الصحيح المطلوب (مُضاف حسب طلبك)
+    const VALID_CODE = "basm2025";
 
-    document.getElementById("loginBtn").addEventListener("click", ()=>{document.getElementById("code-section").style.display="block"});
-    document.getElementById("buyBtn").addEventListener("click", ()=>{window.open("https://wa.me/9647729373260?text=مرحبًا، أرغب بالاشتراك في بوابة المستقبل بسعر 19$ للحصول على كود دخول.","_blank")});
-    document.getElementById("submitBtn").addEventListener("click", ()=>{
-      const name=document.getElementById("userName").value.trim();
-      const code=document.getElementById("userCode").value.trim();
-      const errorMsg=document.getElementById("errorMsg");
-      const welcome=document.getElementById("welcome");
-      const iframeContainer=document.getElementById("iframe-container");
-      const refreshBtn=document.getElementById("refreshBtn");
+    // رابط الصفحة التي تُفتح داخل iframe بعد الدخول
+    const TARGET_URL = "https://linkfly.to/71006mb6ife";
 
-      if(name===""||code===""){errorMsg.textContent="يرجى إدخال الاسم والكود.";return;}
-      if(validCodes.includes(code)){
-        localStorage.setItem("userName",name);
-        localStorage.setItem("userCode",code);
-        errorMsg.textContent="";
-        welcome.textContent=`مرحبًا بك يا ${name} 🌟`;
-        iframeContainer.style.display="block";
-        document.getElementById("loginBtn").style.display="none";
-        document.getElementById("buyBtn").style.display="none";
-        document.getElementById("code-section").style.display="none";
-        document.getElementById("main-title").style.display="none";
-        document.getElementById("app-preview").style.display="none";
-        document.querySelector(".info-text").style.display="none";
-      }else{
-        errorMsg.textContent="الكود غير صحيح. حاول مرة أخرى.";
-        welcome.textContent="";
-        iframeContainer.style.display="none";
-      }
-    });
+    // رقم الواتساب في زر الشراء (موجود في العنصر href جاهز)
+    // اسم العناصر
+    const loginBtn = document.getElementById("loginBtn");
+    const codeSection = document.getElementById("code-section");
+    const submitBtn = document.getElementById("submitBtn");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const userCode = document.getElementById("userCode");
+    const userName = document.getElementById("userName");
+    const errorMsg = document.getElementById("errorMsg");
+    const iframeContainer = document.getElementById("iframe-container");
+    const externalSite = document.getElementById("externalSite");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const featuresBox = document.querySelector(".features-box");
 
-    function refreshSite(){
-      const iframe=document.getElementById("externalSite");
-      iframe.src=iframe.src.split("?v=")[0]+"?v="+new Date().getTime();
+    // for persistent session (optional)
+    const STORAGE_KEY = "bf_access"; // bf = بوابة المستقبل
+
+    /***********************
+     * وظائف الواجهة
+     ***********************/
+    // إظهار حقل الكود
+    function showCodeInput(){
+      codeSection.style.display = "block";
+      codeSection.setAttribute("aria-hidden","false");
+      userCode.focus();
     }
 
-    // --- التحقق من النسخة الديناميكية ---
-    fetch('https://basmali12.github.io/Basmli/version.json?v='+new Date().getTime())
-      .then(res=>res.json())
-      .then(data=>{
-        const CURRENT_VERSION = data.version;
-        const savedVersion = localStorage.getItem("appVersion");
+    // إخفاء حقل الكود
+    function hideCodeInput(){
+      codeSection.style.display = "none";
+      codeSection.setAttribute("aria-hidden","true");
+      errorMsg.textContent = "";
+      userCode.value = "";
+      userName.value = "";
+    }
 
-        if(!savedVersion || savedVersion !== CURRENT_VERSION){
-          document.getElementById("refreshBtn").style.display="inline-block";
-          alert("هناك تحديث جديد! يرجى تحديث التطبيق للحصول على آخر نسخة.");
-        }else{
-          document.getElementById("refreshBtn").style.display="none";
-        }
+    loginBtn.addEventListener("click", showCodeInput);
+    cancelBtn.addEventListener("click", hideCodeInput);
 
-        localStorage.setItem("appVersion",CURRENT_VERSION);
-      })
-      .catch(err=>console.log("خطأ في التحقق من النسخة:",err));
+    // عملية التحقق من الكود (case-insensitive)
+    function checkCode(){
+      const entered = (userCode.value || "").trim().toLowerCase();
+      const name = (userName.value || "").trim();
+      if(!entered){
+        errorMsg.textContent = "يرجى إدخال كود الدخول.";
+        return;
+      }
 
-    document.addEventListener("DOMContentLoaded", function(){
-      const iframe=document.getElementById("externalSite");
-      iframe.src=iframe.src.split("?v=")[0]+"?v="+new Date().getTime();
+      if(entered === VALID_CODE.toLowerCase()){
+        // تخزين الجلسة
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ code: VALID_CODE, name: name || null, ts: Date.now() }));
+        openContent(name);
+      } else {
+        errorMsg.textContent = "الكود غير صحيح. تحقّق وحاول مرة أخرى أو اشترِ كود جديد.";
+      }
+    }
+
+    // فتح المحتوى داخل الإطار
+    function openContent(name){
+      // إخفاء أزرار الدخول والميزات
+      loginBtn.style.display = "none";
+      document.getElementById("buyBtn").style.display = "none";
+      if(featuresBox) featuresBox.style.display = "none";
+
+      // إظهار iframe وملأ الرابط
+      externalSite.src = TARGET_URL;
+      iframeContainer.style.display = "block";
+      iframeContainer.setAttribute("aria-hidden","false");
+      hideCodeInput();
+
+      // رسالة ترحيب خفيفة (غير مزعجة)
+      if(name){
+        // لا نريد alert كبير، نعرض رسالة قصيرة مؤقتة
+        const old = document.querySelector(".meta");
+        if(old) old.textContent = `مرحباً ${name} — تم فتح المحتوى.`;
+      }
+    }
+
+    // إعادة تحميل iframe
+    function refreshSite(){
+      // force reload
+      const src = externalSite.src;
+      externalSite.src = "";
+      setTimeout(()=> externalSite.src = src, 120);
+    }
+
+    // تسجيل الخروج (حذف الجلسة)
+    function logout(){
+      localStorage.removeItem(STORAGE_KEY);
+      // إخفاء الإطار وإعادة الواجهة
+      iframeContainer.style.display = "none";
+      externalSite.src = "";
+      loginBtn.style.display = "inline-flex";
+      document.getElementById("buyBtn").style.display = "inline-flex";
+      if(featuresBox) featuresBox.style.display = "block";
+      const old = document.querySelector(".meta");
+      if(old) old.textContent = "تم تسجيل الخروج.";
+    }
+
+    // استمع للأزرار
+    submitBtn.addEventListener("click", checkCode);
+    refreshBtn.addEventListener("click", refreshSite);
+    logoutBtn.addEventListener("click", logout);
+
+    // تفعيل دخول بالضغط Enter داخل حقل الكود
+    userCode.addEventListener("keydown", function(e){
+      if(e.key === "Enter") checkCode();
     });
+
+    /***********************
+     * جلسة محفوظة عند التحميل
+     ***********************/
+    window.addEventListener("load", ()=>{
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+        if(saved && saved.code && saved.code.toLowerCase() === VALID_CODE.toLowerCase()){
+          // فتح المحتوى تلقائياً إذا كان هناك جلسة سابقة
+          openContent(saved.name || "");
+        }
+      }catch(e){
+        // ignore parse error
+      }
+
+      // إنشاء أيقونات متساقطة (الزينة)
+      initIconRain();
+    });
+
+    /***********************
+     * تأثير الأيقونات المتساقطة
+     ***********************/
+    function initIconRain(){
+      const iconUrls = [
+        // نستخدم أيقونات من ويكيميديا (مباشرة) — صغيرات الحجم
+        "https://upload.wikimedia.org/wikipedia/commons/7/75/Discord_icon.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/7/78/YouTube_Logo_2017.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/9/95/TikTok_logo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/0/0e/Minecraft_Logo.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/4/4e/Google_Play_Store_badge_EN.svg",
+        "https://upload.wikimedia.org/wikipedia/commons/2/2f/Adobe_Photoshop_CC_icon.svg"
+      ];
+
+      const rainEl = document.querySelector(".icon-rain");
+      if(!rainEl) return;
+
+      // نضيف أيقونات بشكل متقطع لتقليل الضغط
+      const createOne = ()=>{
+        const img = document.createElement("img");
+        img.src = iconUrls[Math.floor(Math.random()*iconUrls.length)];
+        img.style.left = Math.random()*100 + "vw";
+        img.style.animationDuration = (6 + Math.random()*6) + "s";
+        img.style.top = (-Math.random()*60 - 40) + "px";
+        rainEl.appendChild(img);
+        // نزيل العنصر بعد انتهاء التحريك لتفادي تراكم العناصر
+        setTimeout(()=> {
+          if(img && img.parentNode) img.parentNode.removeChild(img);
+        }, 14000);
+      };
+
+      // نكرر ببطء
+      for(let i=0;i<12;i++){
+        setTimeout(createOne, i*700);
+      }
+      // ونستمر بإيقاع أقل كثافة
+      setInterval(()=> {
+        // أقل كثافة على الهواتف
+        if(window.innerWidth < 600){
+          if(Math.random() < 0.6) createOne();
+        } else {
+          createOne();
+        }
+      }, 900);
+    }
+
+    /***********************
+     * حماية بسيطة: منع السحب الأيمن (already set on body),
+     * ويمكنك تعطيل اختيار النص إن أردت. (مفعل عبر CSS)
+     ***********************/
   </script>
 </body>
 </html>
