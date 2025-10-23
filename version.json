@@ -15,5 +15,5 @@ fetch('https://basmali12.github.io/Basmli/version.json?v='+new Date().getTime())
   })
   .catch(err=>console.log("خطأ في التحقق من النسخة:",err));
 {
-  "version": "7.464.75"
+  "version": "7.44.75"
 }
