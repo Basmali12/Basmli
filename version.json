@@ -14,3 +14,6 @@ fetch('https://basmali12.github.io/Basmli/version.json?v='+new Date().getTime())
     localStorage.setItem("appVersion",CURRENT_VERSION);
   })
   .catch(err=>console.log("خطأ في التحقق من النسخة:",err));
+{
+  "version": "7.464.75"
+}
