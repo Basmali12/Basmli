@@ -2,11 +2,8 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>دخول المستخدم</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>بوابة المستقبل</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: 'Cairo', sans-serif;
@@ -18,18 +15,16 @@
       user-select: none;
     }
 
-    a {
-      pointer-events: none;
-      color: inherit;
-      text-decoration: none;
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .icon-rain {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       pointer-events: none;
       overflow: hidden;
       z-index: 0;
@@ -44,17 +39,9 @@
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(-50px) rotate(0deg);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(-50px) rotate(0deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
     }
 
     .container {
@@ -64,23 +51,8 @@
       text-align: center;
     }
 
-    h1 {
+    h1, p {
       color: #fff;
-      margin-bottom: 10px;
-      animation: pulse 2s infinite;
-    }
-
-    #app-preview {
-      color: #fff;
-      font-size: 16px;
-      margin-top: -10px;
-      margin-bottom: 10px;
-    }
-
-    .info-text {
-      color: #fff;
-      font-size: 15px;
-      margin-bottom: 20px;
     }
 
     .login-btn, .submit-btn {
@@ -92,12 +64,11 @@
       font-size: 16px;
       cursor: pointer;
       margin: 5px;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: 0.3s;
     }
 
     .login-btn:hover, .submit-btn:hover {
-      background-color: #d32f2f;
-      transform: scale(1.05);
+      background-color: #ff5722;
     }
 
     #code-section {
@@ -130,6 +101,8 @@
       width: 100%;
       height: 100vh;
       border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #333;
     }
 
     #welcome {
@@ -138,16 +111,22 @@
       color: #fff;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.05); opacity: 0.8; }
-      100% { transform: scale(1); opacity: 1; }
+    /* زر التحديث */
+    #refreshBtn {
+      display: none;
+      margin: 15px;
+      padding: 10px 25px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    #refreshBtn:hover {
+      background-color: #218838;
     }
   </style>
 </head>
@@ -156,30 +135,34 @@
   <div class="icon-rain"></div>
 
   <div class="container">
-    <h1 id="main-title">أهلاً بك في عالمك الرمزي</h1>
-    <p id="app-preview">تجربة رمزية فريدة تجمع بين الإلهام والدعم والشراء الفوري.</p>
-    <p class="info-text">إذا لم يكن لديك كود دخول، يمكنك الاشتراك في الخطة المدفوعة بسعر 19$ للحصول على كود خاص بك.</p>
+    <h1 id="main-title">أهلاً بك في بوابة المستقبل</h1>
+    <p id="app-preview">تطبيق مجاني يقدم برامج معدلة وكورسات مجانية بأسلوب رمزي ملهم.</p>
+    <p class="info-text">إذا لم يكن لديك كود دخول، يمكنك الاشتراك بسعر 19$ للحصول على كود خاص بك.</p>
 
-    <button class="login-btn" onclick="showCodeInput()">دخول</button>
-    <button class="login-btn" onclick="buyCode()">شراء الكود</button>
+    <button id="loginBtn" class="login-btn">دخول</button>
+    <button id="buyBtn" class="login-btn">شراء الكود</button>
 
     <div id="code-section">
       <input type="text" id="userName" placeholder="أدخل اسمك">
       <br>
       <input type="text" id="userCode" placeholder="أدخل كود المستخدم">
       <br>
-      <button class="submit-btn" onclick="checkCode()">تأكيد</button>
+      <button id="submitBtn" class="submit-btn">تأكيد</button>
       <div class="error" id="errorMsg"></div>
     </div>
 
     <div id="welcome"></div>
 
+    <!-- زر تحديث الموقع الخارجي -->
+    <button id="refreshBtn" onclick="refreshSite()">🔄 تحديث المحتوى</button>
+
     <div id="iframe-container">
-      <iframe src="https://linkfly.to/71006mb6ife"></iframe>
+      <iframe id="externalSite" src="https://linkfly.to/71006mb6ife"></iframe>
     </div>
   </div>
 
   <script>
+    // الأكواد الصحيحة
     const validCodes = [
       "CODE123", "BASM2025", "USER01", "ENTRY77", "ACCESS99",
       "HELLO22", "RAMZ88", "KEY2024", "OPENME", "TRYME",
@@ -188,19 +171,16 @@
       "NEWCODE21", "VIPIRAQ", "BASM-ENTRY", "CREATOR2025", "ACCESS-IRAQ"
     ];
 
-    window.onload = function() {
-      document.getElementById("main-title").style.display = "block";
-      document.getElementById("app-preview").style.display = "block";
-      document.querySelector(".login-btn").style.display = "inline-block";
-      document.querySelector(".info-text").style.display = "block";
-    };
+    document.getElementById("loginBtn").addEventListener("click", showCodeInput);
+    document.getElementById("buyBtn").addEventListener("click", buyCode);
+    document.getElementById("submitBtn").addEventListener("click", checkCode);
 
     function showCodeInput() {
       document.getElementById("code-section").style.display = "block";
     }
 
     function buyCode() {
-      window.open("https://wa.me/9647729373260?text=مرحبًا، أرغب بالاشتراك في الخطة الرمزية بسعر 19$ للحصول على كود دخول.", "_blank");
+      window.open("https://wa.me/9647729373260?text=مرحبًا، أرغب بالاشتراك في بوابة المستقبل بسعر 19$ للحصول على كود دخول.", "_blank");
     }
 
     function checkCode() {
@@ -209,6 +189,7 @@
       const errorMsg = document.getElementById("errorMsg");
       const welcome = document.getElementById("welcome");
       const iframeContainer = document.getElementById("iframe-container");
+      const refreshBtn = document.getElementById("refreshBtn");
 
       if (name === "" || code === "") {
         errorMsg.textContent = "يرجى إدخال الاسم والكود.";
@@ -221,35 +202,48 @@
         errorMsg.textContent = "";
         welcome.textContent = `مرحبًا بك يا ${name} 🌟`;
         iframeContainer.style.display = "block";
-        document.querySelector(".login-btn").style.display = "none";
-        document.querySelectorAll(".login-btn")[1].style.display = "none";
+        refreshBtn.style.display = "inline-block";
+        document.getElementById("loginBtn").style.display = "none";
+        document.getElementById("buyBtn").style.display = "none";
         document.getElementById("code-section").style.display = "none";
         document.getElementById("main-title").style.display = "none";
         document.getElementById("app-preview").style.display = "none";
         document.querySelector(".info-text").style.display = "none";
-        document.querySelector(".icon-rain").style.display = "none"; // إخفاء الأيقونات بعد الدخول
+        document.querySelector(".icon-rain").style.display = "none";
       } else {
         errorMsg.textContent = "الكود غير صحيح. حاول مرة أخرى.";
         welcome.textContent = "";
         iframeContainer.style.display = "none";
+        refreshBtn.style.display = "none";
       }
     }
 
-    document.addEventListener("copy", function(e) {
-      e.preventDefault();
-    });
+    function refreshSite() {
+      const iframe = document.getElementById("externalSite");
+      iframe.src = iframe.src; // يعيد تحميل الموقع الخارجي
+    }
 
-    document.addEventListener("keydown", function(e) {
-      if (
-        (e.ctrlKey && e.key === "u") ||
-        (e.ctrlKey && e.key === "c") ||
-        (e.ctrlKey && e.shiftKey && e.key === "I")
-      ) {
-        e.preventDefault();
-      }
-    });
-
+    // تأثير الأيقونات المتساقطة
     const iconRain = document.querySelector(".icon-rain");
-    const icons = [43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/Abdullah3434/yoc/tree/35c0baf121a783b546f5a10188e408df372e696e/resources%2Fviews%2Fvendor%2Flayout%2Fappvendor.blade.php?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054&citationId=1&citationId=2&citationId=3 "github.com")[
+    const icons = [
       "https://upload.wikimedia.org/wikipedia/commons/0/0e/Minecraft_Logo.svg",
-      "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp
+      "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/9/95/TikTok_logo.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/7/75/Discord_icon.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/4/4e/Google_Play_Store_badge_EN.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/7/78/YouTube_Logo_2017.svg",
+      "https://upload.wikimedia.org/wikipedia/commons/2/2f/Adobe_Photoshop_CC_icon.svg"
+    ];
+
+    function createIcon() {
+      const img = document.createElement("img");
+      img.src = icons[Math.floor(Math.random() * icons.length)];
+      img.style.left = Math.random() * window.innerWidth + "px";
+      img.style.animationDuration = (5 + Math.random() * 5) + "s";
+      iconRain.appendChild(img);
+    }
+
+    setInterval(createIcon, 500);
+  </script>
+</body>
+</html>
