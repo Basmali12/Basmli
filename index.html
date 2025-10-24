@@ -2,35 +2,21 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بوابة المستقبل</title>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(-45deg, #000000, #1a1a1a, #330000);
+      background: linear-gradient(-45deg, #ffcccc, #990000);
       color: white;
       text-align: center;
       overflow-x: hidden;
     }
-
-    .container {
-      padding: 30px 15px;
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: #ff5050;
-    }
-
-    h3.price {
-      font-size: 22px;
-      color: #00ff7f;
-      margin: 5px 0 20px;
-    }
-
+    .container { padding: 30px 15px; max-width: 900px; margin: auto; }
+    h1 { font-size: 26px; margin-bottom: 15px; color: #ff5050; }
+    .price { font-size: 20px; margin-bottom: 15px; color: #fff200; }
     .button {
       background: linear-gradient(90deg, #ff0000, #cc0000);
       border: none;
@@ -44,14 +30,8 @@
       text-decoration: none;
       margin: 10px 0;
     }
-
-    .button:hover {
-      background: linear-gradient(90deg, #cc0000, #ff0000);
-      transform: scale(1.05);
-    }
-
+    .button:hover { background: linear-gradient(90deg, #cc0000, #ff0000); transform: scale(1.05); }
     .form-box {
-      display: none;
       background: rgba(255, 255, 255, 0.05);
       padding: 20px;
       border-radius: 12px;
@@ -61,16 +41,7 @@
       margin-left: auto;
       margin-right: auto;
     }
-
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
+    input { width: 90%; padding: 10px; margin: 10px 0; border: none; border-radius: 8px; font-size: 16px; }
     .features {
       text-align: right;
       margin: 20px auto;
@@ -80,16 +51,9 @@
       width: 90%;
       max-width: 500px;
       overflow-y: auto;
-      max-height: 500px;
+      max-height: 400px;
     }
-
-    .features h2 {
-      text-align: center;
-      color: #ff5050;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
+    .features h2 { text-align: center; color: #ff5050; font-size: 22px; }
     .features p {
       line-height: 1.8;
       font-size: 15px;
@@ -97,24 +61,13 @@
       padding-bottom: 5px;
       margin-bottom: 8px;
     }
-
-    .divider {
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      margin: 15px 0;
-    }
-
-    footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #aaa;
-    }
+    footer { margin-top: 30px; font-size: 14px; color: #aaa; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>🎯 بوابة المستقبل</h1>
-    <h3 class="price">💰 سعر الاشتراك: 19 $ فقط</h3>
-    <p>مرحباً بك في عالم التعلم والفرص الجديدة!</p>
+    <p class="price">سعر الاشتراك: $19</p>
 
     <button class="button" onclick="showLogin()">دخول إلى البوابة</button>
 
@@ -129,9 +82,7 @@
 
     <div class="features">
       <h2>⭐ ميزات الاشتراك</h2>
-
-      <div class="divider"></div>
-      <h3>🎓 كورسات ودورات تعليمية</h3>
+      <!-- ضع هنا جميع ميزات الـ60 كما في النسخة السابقة -->
       <p>1. أكثر من 1,000,000 كورس مجاني في البرمجة والتصميم واللغات.</p>
       <p>2. كتب مرفقة مع بعض الكورسات لتسهيل التعلم.</p>
       <p>3. كورسات تطوير الذات والمهارات الشخصية.</p>
@@ -142,9 +93,6 @@
       <p>8. شهادات مجانية بعد إنهاء بعض الكورسات.</p>
       <p>9. تحديث أسبوعي للكورسات الجديدة.</p>
       <p>10. تحميل الدروس لمشاهدتها بدون إنترنت.</p>
-
-      <div class="divider"></div>
-      <h3>🎮 ألعاب وتطبيقات معدلة</h3>
       <p>11. أكثر من 1,000,000 لعبة معدلة بدون إعلانات.</p>
       <p>12. ألعاب بموارد غير محدودة.</p>
       <p>13. 80٪ من الألعاب من Google Play معدلة بالكامل.</p>
@@ -155,22 +103,16 @@
       <p>18. برامج لتعديل الصوت والفيديو.</p>
       <p>19. تحديث دائم للألعاب والتطبيقات.</p>
       <p>20. إمكانية تجربة التطبيقات قبل التحميل.</p>
-
-      <div class="divider"></div>
-      <h3>💼 مواقع العمل والربح</h3>
       <p>21. أكثر من 500,000 موقع للعمل عن بعد.</p>
       <p>22. مواقع للعمل الحر وكسب المال.</p>
       <p>23. مواقع للتجارة الإلكترونية.</p>
       <p>24. وظائف ودورات مدفوعة مجانية.</p>
       <p>25. أدوات مساعدة للربح من الإنترنت.</p>
-      <p>26. دروس لزيادة الدخل الشهري.</p>
+      <p>26. دروس لزيادة الدخل.</p>
       <p>27. مواقع استثمار وتعليم مالي.</p>
       <p>28. تعلم التسويق عبر السوشيال ميديا.</p>
       <p>29. منصات لتصميم التطبيقات والمواقع.</p>
       <p>30. تحديثات أسبوعية للمواقع الجديدة.</p>
-
-      <div class="divider"></div>
-      <h3>📚 مكتبة الكتب</h3>
       <p>31. أكثر من 4,000 موقع كتب مجانية.</p>
       <p>32. مكتبة ضخمة للكتب التعليمية.</p>
       <p>33. روايات وقصص مجانية.</p>
@@ -181,9 +123,6 @@
       <p>38. تحميل الكتب وقراءتها بدون إنترنت.</p>
       <p>39. مكتبات منظمة حسب الموضوع.</p>
       <p>40. تحديث دائم للكتب الجديدة.</p>
-
-      <div class="divider"></div>
-      <h3>✨ مكتبة القصص والمحتوى الإبداعي</h3>
       <p>41. أكثر من 500,000 قصة مجانية.</p>
       <p>42. قصص قصيرة وطويلة.</p>
       <p>43. مكتبة قصص عالمية.</p>
@@ -194,9 +133,6 @@
       <p>48. دعم فني مباشر.</p>
       <p>49. تجربة آمنة لجميع الملفات.</p>
       <p>50. تحديث مستمر للمحتوى.</p>
-
-      <div class="divider"></div>
-      <h3>🧠 ميزات إضافية للهكر الأخلاقي</h3>
       <p>51. دورات متخصصة في الأمن السيبراني.</p>
       <p>52. أدوات اختبار اختراق قانونية.</p>
       <p>53. تعلم تحليل الثغرات وتأمين الأنظمة.</p>
@@ -207,58 +143,28 @@
       <p>58. أدوات محاكاة للهجمات لاختبار الأمان.</p>
       <p>59. محتوى تعليمي لتصبح خبير أمن معلومات.</p>
       <p>60. شهادات بعد إتمام الدورات المتقدمة.</p>
-
     </div>
 
     <footer>© 2025 بوابة المستقبل | جميع الحقوق محفوظة</footer>
   </div>
 
   <script>
-    // أكواد الدخول الحقيقية
-    const validCodes = ['basm123', 'demo2025'];
-    const userCodeMap = {};
-    const caseInsensitive = false;
+    const loginBox = document.getElementById('loginBox');
+    function showLogin(){ loginBox.style.display = "block"; }
 
-    function showLogin() {
-      document.getElementById("loginBox").style.display = "block";
-      document.getElementById("username").focus();
-    }
+    // جميع الأكواد الثابتة
+    const validCodes = ['1834','2759','4012','5687','7921','6340','4572','9093','3265','7184','8420','1596','2048','6705','3871','4938','2507','8816','3354','7602','basm123'];
 
-    function normalize(s) {
-      return caseInsensitive ? s.toLowerCase() : s;
-    }
-
-    function login() {
-      const user = document.getElementById("username").value.trim();
-      const code = document.getElementById("code").value.trim();
-
-      if (user === "" || code === "") {
-        alert("الرجاء إدخال اسم المستخدم وكود الدخول.");
-        return;
+    function login(){
+      const user=document.getElementById('username').value.trim();
+      const code=document.getElementById('code').value.trim();
+      if(!user||!code){ alert("الرجاء إدخال اسم المستخدم وكود الدخول."); return; }
+      if(validCodes.includes(code)){
+        // لا نحذف الأكواد بعد تسجيل الدخول
+        window.location.href="https://linkfly.to/71006mb6ife?us=linkfly&uc=preview&user="+encodeURIComponent(user);
+      }else{
+        alert("كود الدخول غير صالح.");
       }
-
-      const codeToCheck = normalize(code);
-      if (Object.keys(userCodeMap).length > 0 && userCodeMap[user]) {
-        if (normalize(userCodeMap[user]) === codeToCheck) {
-          successfulLogin(user);
-          return;
-        } else {
-          alert("كود الدخول غير صحيح لاسم المستخدم هذا.");
-          return;
-        }
-      }
-
-      if (validCodes.map(c => normalize(c)).includes(codeToCheck)) {
-        successfulLogin(user);
-      } else {
-        alert("كود الدخول غير صالح. الرجاء التأكد من الكود أو شراء كود جديد.");
-      }
-    }
-
-    function successfulLogin(username) {
-      const target = "https://linkfly.to/71006mb6ife?us=linkfly&uc=preview";
-      const url = target + "&u=" + encodeURIComponent(username);
-      window.location.href = url;
     }
   </script>
 </body>
